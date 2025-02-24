@@ -1,28 +1,48 @@
 #!/usr/bin/env python3
 
-# command line args
 import argparse
+import json
+import os
+import matplotlib.pyplot as plt
+
+# Parse command line arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_path',required=True)
-parser.add_argument('--key',required=True)
-parser.add_argument('--percent',action='store_true')
+parser.add_argument('--input_path', required=True, help="Path to the reduced JSON file")
+parser.add_argument('--key', required=True, help="Hashtag to visualize")
 args = parser.parse_args()
 
-# imports
-import os
-import json
-from collections import Counter,defaultdict
+# Load data from the JSON file
+try:
+    with open(args.input_path, 'r') as f:
+        data = json.load(f)
+except Exception as e:
+    print(f"Error loading file {args.input_path}: {e}")
+    exit(1)
 
-# open the input path
-with open(args.input_path) as f:
-    counts = json.load(f)
+# Extract and sort data for the given key
+if args.key not in data:
+    print(f"Key '{args.key}' not found in {args.input_path}")
+    exit(1)
 
-# normalize the counts by the total values
-if args.percent:
-    for k in counts[args.key]:
-        counts[args.key][k] /= counts['_all'][k]
+key_data = data[args.key]
+sorted_items = sorted(key_data.items(), key=lambda x: x[1])[-10:]  # Top 10
 
-# print the count values
-items = sorted(counts[args.key].items(), key=lambda item: (item[1],item[0]), reverse=True)
-for k,v in items:
-    print(k,':',v)
+# Prepare data for plotting
+labels, values = zip(*sorted_items)
+
+# Generate bar plot
+plt.figure(figsize=(12, 6))
+plt.bar(labels, values, color='skyblue')
+plt.xlabel("Category")
+plt.ylabel("Count")
+plt.xticks(rotation=45, ha='right')
+plt.title(f"Top 10 occurrences of {args.key} in {os.path.basename(args.input_path)}")
+plt.tight_layout()
+
+# Save figure
+output_filename = f"{os.path.basename(args.input_path)}_{args.key.replace('#', '')}.png"
+output_path = os.path.join("outputs", output_filename)
+plt.savefig(output_path, dpi=300)
+plt.close()
+
+print(f"Saved visualization to {output_path}")
