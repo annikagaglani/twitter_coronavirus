@@ -50,7 +50,8 @@ for hashtag, counts in hashtag_counts.items():
 plt.xlabel("Date")
 plt.ylabel("Number of Tweets")
 plt.title("Hashtag Trends Over Time")
-plt.xticks(dates[::20], rotation=45, fontsize=8)
+select_dates = dates[::20]
+plt.xticks(select_dates, rotation=45, fontsize=8)
 
 plt.legend()
 plt.tight_layout()
