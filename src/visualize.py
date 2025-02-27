@@ -1,52 +1,43 @@
 #!/usr/bin/env python3
 
+# command line args
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('--input_path', required=True)
-parser.add_argument('--key', required=True)
-parser.add_argument('--percent', action='store_true')
+parser.add_argument('--input_path',required=True)
+parser.add_argument('--key',required=True)
+parser.add_argument('--percent',action='store_true')
 args = parser.parse_args()
 
+# imports
 import os
 import json
-from collections import Counter, defaultdict
+from collections import Counter,defaultdict
 import matplotlib.pyplot as plt
-import re
+import matplotlib
 
-# Open the input JSON file
-with open(args.input_path) as f:
+# open the input path
+with open(args.input_path, encoding='utf-8') as f:
     counts = json.load(f)
 
-# Normalize counts if requested
+# normalize the counts by the total values
 if args.percent:
-    for k in counts.get(args.key, {}):  # Using .get() to avoid KeyError
+    for k in counts[args.key]:
         counts[args.key][k] /= counts['_all'][k]
 
-# Get the items sorted by value (top 10), then re-sort in ascending order for the graph
-items = sorted(counts.get(args.key, {}).items(), key=lambda item: item[1], reverse=True)
-top_10 = items[:10]
-top_10 = sorted(top_10, key=lambda item: item[1])
+# print the count values
+items = sorted(counts[args.key].items(), key=lambda item: (item[1],item[0]), reverse=True)
 
-if not top_10:
-    print(f"No data found for key: {args.key}")
-    exit()
+for k,v in items:
+    print(k,':',v)
 
-keys = [k for k, v in top_10]
-values = [v for k, v in top_10]
+plot_title = 'count of hashtag by country'
+png_title = args.input_path+args.key+'.png'
 
-# Create the bar graph
-plt.figure(figsize=(10, 6))
-plt.bar(keys, values, color='purple')
-plt.xlabel('Keys')
-plt.ylabel('Values')
-plt.title(f'Top 10 Keys for {args.key}')
-plt.xticks(rotation=0)
+top_10 = sorted(items[:10], key=lambda x: x[1])
+keys, values = zip(*top_10)
+plt.xlabel("country")
+plt.ylabel("Count")
+plt.title(plot_title)
+plt.bar(keys, values)
 plt.tight_layout()
-
-# Create a unique output filename based on the input file and key
-input_base = os.path.splitext(os.path.basename(args.input_path))[0]
-safe_key = re.sub(r'[^\w]', '_', args.key, flags=re.UNICODE)
-output_filename = f'plot_{input_base}_{safe_key}.png'
-
-plt.savefig(output_filename)
-print('Bar graph saved as', output_filename)
+plt.savefig(png_title, bbox_inches="tight")
