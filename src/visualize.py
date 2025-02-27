@@ -27,17 +27,21 @@ if args.percent:
 # print the count values
 items = sorted(counts[args.key].items(), key=lambda item: (item[1],item[0]), reverse=True)
 
-for k,v in items:
-    print(k,':',v)
+top10 = items[-10:]
+keys = [k for k, v in top10]
+values = [v for k, v in top10]
+if "country" in args.input_path:
+    x="countries"
+else:
+    x="languages"
 
-plot_title = 'count of hashtag by country'
 png_title = args.input_path+args.key+'.png'
 
 top_10 = sorted(items[:10], key=lambda x: x[1])
 keys, values = zip(*top_10)
-plt.xlabel("country")
+plt.xlabel(x)
 plt.ylabel("Count")
-plt.title(plot_title)
+plt.title(f'Top 10 {x} by {args.key}')
 plt.bar(keys, values)
 plt.tight_layout()
 plt.savefig(png_title, bbox_inches="tight")
