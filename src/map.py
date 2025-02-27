@@ -44,17 +44,13 @@ with zipfile.ZipFile(args.input_path) as archive:
 
     # loop over every file within the zip file
     for i,filename in enumerate(archive.namelist()):
-        if i >= 10: #stop after 10
-            break
         print(datetime.datetime.now(),args.input_path,filename)
 
         # open the inner file
         with archive.open(filename) as f:
 
             # loop over each line in the inner file
-            for line_num,line in enumerate(f):
-                if line_num >= 10:
-                    break
+            for line in f:
 
                 # load the tweet as a python dictionary
                 tweet = json.loads(line)
@@ -62,12 +58,11 @@ with zipfile.ZipFile(args.input_path) as archive:
                 # convert text to lower case
                 text = tweet['text'].lower()
                 
-                # Extract country code safely
-                country = tweet['place']['country_code'] if tweet.get('place') else 'unknown'
-
                # search hashtags
                 for hashtag in hashtags:
                     lang = tweet['lang']
+                    if tweet.get('place') and tweet['place'].get('country_code'):
+                        country = tweet['place']['country_code']
                     if hashtag in text:
                         counter_lang[hashtag][lang] += 1
                         counter_country[hashtag][country] += 1
