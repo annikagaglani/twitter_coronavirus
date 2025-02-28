@@ -28,19 +28,19 @@ The dataset consists of geotagged Twitter data files from 2020, formatted as `ge
 ## Results
 
 **Top 10 Languages Using #coronavirus**
-(insert image here)
+![covid lang plot](lang.json#coronavirus.png)
 
 **Top 10 Languages Using #코로나바이러스 (Korean coronavirus hashtag)**
-(insert image here)
+![korean covid lang plot](lang.json#코로나바이러스.png)
 
 **Top 10 Countries Using #coronavirus**
-(insert image here)
+![covid country plot](country.json#coronavirus.png)
 
 **Top 10 Countries Using #코로나바이러스**
-(insert image here)
+![korean covid country plot](country.json#코로나바이러스.png)
 
 **Time-Series Trend of #coronavirus and #covid19**
-(insert image here)
+![hashtag trends plot](hashtag_trends.png)
 
 ## How to Run the Analysis
 
@@ -56,6 +56,18 @@ python3 src/reduce.py --input_paths outputs/*.json --output_path outputs/lang.js
 ```
 
 3) Generate the Bar Plots from `visualize.py`
-```
+   * For Language Data
+     ```
+     python3 src/visualize.py --input_path outputs/lang.json --key='#coronavirus'
+     python3 src/visualize.py --input_path outputs/lang.json --key='#코로나바이러스'
+     ```
+   * For Country Data
+     ```
+     python3 src/visualize.py --input_path outputs/country.json --key='#coronavirus'
+     python3 src/visualize.py --input_path outputs/country.json --key='#코로나바이러스'
+     ```
 
+4) Generate the Time-Series Analysis Plot from `alternative_reduce.py`
+```
+python3 src/alternative_reduce.py --hashtags '#coronavirus' '#covid19' --input_folder outputs/ --output_path graphs/trend_plot.png
 ```
