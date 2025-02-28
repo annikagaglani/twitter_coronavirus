@@ -54,6 +54,7 @@ select_dates = dates[::20]
 plt.xticks(select_dates, rotation=45, fontsize=8)
 
 plt.legend()
+plt.grid(True)
 plt.tight_layout()
 
 # Save plot
