@@ -28,16 +28,19 @@ The dataset consists of geotagged Twitter data files from 2020, formatted as `ge
 ## Results
 
 **Top 10 Languages Using #coronavirus**
-![covid lang plot](graphs/lang.json#coronavirus.png)
+
+![lang json#coronavirus](https://github.com/user-attachments/assets/d78ed25e-6055-4cd6-ad89-0f979c0b0dc3)
 
 **Top 10 Languages Using #코로나바이러스 (Korean coronavirus hashtag)**
-![korean covid lang plot](graphs/lang.json#코로나바이러스.png)
+![lang json#코로나바이러스](https://github.com/user-attachments/assets/805c70c3-46f6-4e27-b0d5-0affca8c4c3e)
 
 **Top 10 Countries Using #coronavirus**
-![covid country plot](graphs/country.json#coronavirus.png)
+
+![country json#coronavirus](https://github.com/user-attachments/assets/c49d1615-c3c4-4dd6-8fb8-5a5de7ea243e)
 
 **Top 10 Countries Using #코로나바이러스**
-![korean covid country plot](graphs/country.json#코로나바이러스.png)
+
+![country json#코로나바이러스](https://github.com/user-attachments/assets/c1f7051f-a9c2-4f8e-9ee6-22256e8a0912)
 
 **Time-Series Trend of #coronavirus and #covid19**
 ![hashtag trends plot](graphs/hashtag_trends.png)
